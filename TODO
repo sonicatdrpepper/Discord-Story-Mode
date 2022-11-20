@@ -1,0 +1,11 @@
+General TODO:
+Battle System
+Leveling/Stats
+Data Storage (SQLite3)
+Maybe make Fights non-automatic, Controlled via reactions or something similar, like pokemon style turn based combat
+
+Cutscene TODO:
+Cutscenes - Custom Cutscene format that supports dialogue options, starting fights, finding items, etc.
+
+IDEA:
+Make webui, for like a world map or something
