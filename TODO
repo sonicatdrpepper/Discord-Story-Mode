@@ -2,10 +2,13 @@ General TODO:
 Battle System
 Leveling/Stats
 Data Storage (SQLite3)
-Maybe make Fights non-automatic, Controlled via reactions or something similar, like pokemon style turn based combat
+Maybe make Fights non-automatic, Controlled via reactions or something similar, like pokemon style turn based combat, includes UI Via embeds
+Inventory System, start with system for adding/removing items, and displaying them to the player
 
 Cutscene TODO:
 Cutscenes - Custom Cutscene format that supports dialogue options, starting fights, finding items, etc.
+Cutscene format could work by having a metadata file, and a actual data file. metadata file includes stuff like characters that are present, cutscene name, etc. Main file has the actual script, with an event at the end. this would mean that you can only have 1 event per cutscene, but cutscenes could be split to account for this. events and variables will be handled inside the cutscene player function.
+Events are just words inside of {}, e.g {END} {BATTLE} {ITEM} {DIALOGUE_RESPONSE}
 
 IDEA:
 Make webui, for like a world map or something

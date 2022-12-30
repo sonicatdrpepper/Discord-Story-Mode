@@ -1,0 +1,11 @@
+Player_Name: Player_Class
+NPC1_Name: NPC1_Class
+NPC2_Name: NPC2_Class
+//example of a WAIT event, that waits for 1 second
+{WAIT}
+1
+Battle Start
+//BATTLE event
+//{BATTLE}
+{ITEM}
+Knife,-50

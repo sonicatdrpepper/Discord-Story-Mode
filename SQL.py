@@ -15,9 +15,9 @@ def UpdateTime():
     time=datetime.datetime.now().strftime("%m/%d/%Y, %I:%M %p")
     return time
 #Updates a given column in a given row. row should be equal to the data present in the ID column
-def WriteSQL(Column,Data,Row,Table):
+def WriteSQL(Column,IDColumn,Data,Row,Table):
     Row=f'"{str(Row)}"'
-    cur.execute(f"UPDATE {Table} SET {Column} = {Data} WHERE ID = {Row};")
+    cur.execute(f"UPDATE {Table} SET {Column} = {Data} WHERE {IDColumn} = {Row};")
     if Logs == 'True':
         time=UpdateTime()
         print(f"{time}: wrote {Data} to row {Row} and column {Column} in table {Table}")
@@ -45,7 +45,7 @@ def DeleteSQLrow(Row,Table):
 #Returns 1 if value is found returns 0 otherwise
 def CheckSQLUser(Value):
     Value=f'"{str(Value)}"'
-    cur.execute(f"SELECT ID FROM data WHERE ID={Value};")
+    cur.execute(f"SELECT ID FROM UserData WHERE ID={Value};")
     result=cur.fetchone()
     if result == None:
         result = 0
