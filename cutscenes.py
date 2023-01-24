@@ -9,6 +9,7 @@ Events = ["{END}", "{BATTLE}", "{ITEM}", "{DIALOGUE_RESPONSE}","{WAIT}"]
 global WaitTriggered
 WaitTriggered = 0
 ItemTriggered = 0
+DialgueChoiceTriggered = 0
 #Read in Data of NPCs that are present in the cutscene
 NPC1_Name=SQL.ReadSQL(NPCs[0],"PRETTY_NAME","NAME","NPCData")
 NPC1_Class=SQL.ReadSQL(NPCs[0],"CLASS","NAME","NPCData")
@@ -44,17 +45,15 @@ async def Play_Cutscene(ctx,ID):
             elif line == Events[1]:
                 Data_Return.append(Events[1])
                 Data_Return.append(Enemy_NPC[0])
-                print("Battle Triggered")
                 return Data_Return
             #Handle {ITEM} Event
             elif line == Events[2]:
-                Data_Return.append(Events[2])
-                
-                return Data_Return
+                global ItemTriggered
+                ItemTriggered = 1
             #Handle {DIALOGUE_RESPONSE} Event
             elif line == Events[3]:
-                Data_Return.append(Events[3])
-                return Data_Return
+                global DialgueChoiceTriggered
+                DialgueChoiceTriggered = 1
             #Handle {WAIT} Event
             elif line == Events[4]:
                 global WaitTriggered
@@ -79,8 +78,14 @@ async def Play_Cutscene(ctx,ID):
                 return Data_Return
             except:
                 print("Exception thrown while processing ITEM event")
+        elif DialgueChoiceTriggered == 1:
+            Choices = line.split(',')
+            Data_Return.append(Events[3])
+            Data_Return.append(Choices)
+            return Data_Return
         #Run if line does not contain an event
         else:
+            #Replace variables
             line = line.replace("Player_Name", Player_Name)
             line = line.replace("Player_Class", Player_Class)
             print(line)

@@ -1,12 +1,14 @@
-import discord,random,configparser
+import discord,random,configparser,asyncio
 from SQL import CheckSQLUser, ReadSQL, GetAllData, WriteSQL
 from time import sleep
 from cutscenes import *
 from Image_Manip import Download, CreateStatCard,CreateLevelCard
-import Inventory
+import Inventory, Tables
 
 TOKEN="MTA0MzczNDY5NDQ4MDU4MDcyOQ.GXD-am.WUDQN3kwofDBDWE-HwZ320xSEkLoAcLADyAOgA"
-client=discord.Bot()
+intents=discord.Intents.default()
+intents.message_content = True
+client=discord.Bot(intents=intents)
 
 @client.event
 async def on_ready():
@@ -14,8 +16,8 @@ async def on_ready():
 
 @client.slash_command(name="test-cutscene")
 async def test_cutscene(ctx):
-    #await cutscene(ctx,"cutscene1")
-    await Inventory.DisplayInventory(ctx.author.id,ctx)
+    await cutscene(ctx,"cutscene1")
+    #await Inventory.DisplayInventory(ctx.author.id,ctx)
     
 @client.slash_command(name="view_stats")
 async def stats(ctx):
@@ -260,30 +262,71 @@ def Execute_Turn(Opponent1_ID,Opponent2):
 async def cutscene(ctx,cutsceneID):
     #Read Cutscene File
     Player = ctx.author
+    #A response is required for slash commands, (which im using for testing) and I cant respond from the cutscene player function cause its in a different file I think
     tmp = await ctx.respond("_")
     # time.sleep(0.1)
     # tmp.delete()
     # time.sleep(.5)
+    
+    #Define a check for use with Client.wait_for()
+    def Check(m: discord.Message):
+        return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id 
+    
     Event = await Play_Cutscene(ctx,cutsceneID)
     #Handle BATTLE event
     if Event[0] == "{BATTLE}":
+        #Start a battle against first enemy in enemy NPC's list
         print("Executing Battle")
         await Fight_NPC_Complex(ctx,Event[1],Player)
         return
     #Handle ITEM event
     elif Event[0] == "{ITEM}":
-        #TODO implement a Inventory system for this event to work
         Amount = Event[2]
         Item = Event[1]
+        #Add or remove item from inventory
         if Amount > 0:
             Inventory.AddItems(str(Player.id),Item,Amount)
             await ctx.send(f"You gained {Amount} of {Item}")
         elif Amount < 0:
             Inventory.RemoveItems(str(Player.id),Item,Amount)
             await ctx.send(f"You lost {Amount} of {Item}")
-
+    elif Event[0] == "{DIALOGUE_RESPONSE}":
+        #Print out all dialouge choices
+        DialogueChoices = Event[1]
+        for i in range(len(DialogueChoices)):
+            await ctx.send(DialogueChoices[i])
+        #Wait 60 seconds for user to send a message
+        try:
+            callback = await client.wait_for('message',check=Check,timeout=60)
+        except asyncio.TimeoutError:
+            await ctx.send(f"Timed Out")
+        #Check if sent message matches a dialogue choice
+        else:
+            for j in range(len(DialogueChoices)):
+                #Runs if match is found
+                if callback.content.lower() == DialogueChoices[j].lower():
+                    await ctx.send(f"you chose {DialogueChoices[j]}")
+                    return
+                #Runs if message does not match a choice
+            await ctx.send(f"you sent {callback.content.lower()}")
 #Adds Player to the database, and sets up all relevant values
-def Init():
+def Init(ctx):
     pass
+
+#Will take and parse text input, similar to text adventure games like Zork
+async def Commands(ctx):
+    #Define a check for use with Client.wait_for()
+    def Check(m: discord.Message):
+        return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id 
+    #Wait for Input
+    try:
+        callback = await client.wait_for('message',check=Check,timeout=60)
+    except asyncio.TimeoutError:
+        await ctx.send(f"Timed Out")
+    #Check input against Table
+    if callback.content.lower() in Tables.Commands:
+        pass
+    else:
+        pass
 
 client.run(TOKEN)

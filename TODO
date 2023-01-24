@@ -4,6 +4,7 @@ Leveling/Stats
 Data Storage (SQLite3)
 Maybe make Fights non-automatic, Controlled via reactions or something similar, like pokemon style turn based combat, includes UI Via embeds
 Inventory System, start with system for adding/removing items, and displaying them to the player
+Make equippment system
 
 Cutscene TODO:
 Cutscenes - Custom Cutscene format that supports dialogue options, starting fights, finding items, etc.

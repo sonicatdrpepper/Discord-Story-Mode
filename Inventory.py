@@ -2,7 +2,7 @@ import SQL
 import discord
 #This list contains the name of every valid item in the Database, ***VERY VITAL***, make sure to keep it updated!
 #The positions of items in this list also dictate their positions within the inventories of players when the inventory is being read into memory
-Items=["Test_Item","Knife","BetterKnife"]
+Items=["Knife","BetterKnife"]
 #User should be the Player's ID
 #Item should be the Name of the item, as defined in its relevant column in the database
 #Amount is the amount of item the Player should have
