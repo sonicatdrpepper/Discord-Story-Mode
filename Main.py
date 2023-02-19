@@ -5,7 +5,7 @@ from cutscenes import *
 from Image_Manip import Download, CreateStatCard,CreateLevelCard
 import Inventory, Tables
 
-TOKEN="MTA0MzczNDY5NDQ4MDU4MDcyOQ.GXD-am.WUDQN3kwofDBDWE-HwZ320xSEkLoAcLADyAOgA"
+TOKEN=""
 intents=discord.Intents.default()
 intents.message_content = True
 client=discord.Bot(intents=intents)
