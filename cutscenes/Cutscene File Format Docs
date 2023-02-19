@@ -1,5 +1,0 @@
-Line 1 of the file contains metadata, such as the name of the cutscene, and any NPC's present
-Subsequent lines contain the script for the cutscene, this is executed line by line, normal text is directly output with no modification, however text within {} will be treated as a variable (useful for getting the player's name, or the name of an NPC from the database)
-Other special characters include:
-\n for line breaks
-standard discord formatting codes such as * for italics, ** for bold, `` for code block's, etc.
