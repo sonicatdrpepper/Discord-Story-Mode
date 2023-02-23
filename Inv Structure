@@ -4,4 +4,4 @@ Row 0 = Type #Valid types are WEAPON,ARMOR,STATUS,KEY
 Row 1 = Strength (Damage if its a weapon, Damage Reduction if its an armor, heal points if its a restorative item, etc. should be 0 for key items)
 Row 2 = Maximum Durability???
 Row 3 = What slot(s) it equips to #Valid slots are L_HAND,R_HAND,CHEST,LEG,HEAD
-Row 4 = Weight in Pounds
+Row 4 = Weight in Kilos
