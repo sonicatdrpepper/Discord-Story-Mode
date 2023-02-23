@@ -1,8 +1,9 @@
-import SQL
 import discord
+import SQL,Tables
+from Image_Manip import Composite, QueueText
 #This list contains the name of every valid item in the Database, ***VERY VITAL***, make sure to keep it updated!
 #The positions of items in this list also dictate their positions within the inventories of players when the inventory is being read into memory
-Items=["Knife","BetterKnife"]
+Items = Tables.Items
 #User should be the Player's ID
 #Item should be the Name of the item, as defined in its relevant column in the database
 #Amount is the amount of item the Player should have
@@ -21,21 +22,32 @@ def RemoveItems(User,Item,Amount=0):
     SQL.WriteSQL(Item,"ID",Amount,User,"Inventory")
 
 #Displays the Inventory info of a User, as a Discord Embed.
-async def DisplayInventory(User,ctx):
+#TODO Make this generate an image instead, easier to work with that way
+def DisplayInventory(User,ctx):
+    #Read inventory from Save File
     Inventory=[]
-    User=str(ctx.author.id)
+    if ctx != 1:
+        User=str(ctx.author.id)
+    else:
+        User=str(User)
+    #Get list of all items in the players inventory, and their amounts
     for i in range(len(Items)):
+        List=[]
         Item=Items[i-1]
-        pass
         Data = SQL.ReadSQL(User,Item,"ID","Inventory")
-        Inventory.append(Data)
-    #Construct embed
-    description=""
-    Embed = discord.Embed(type="rich",title="Inventory",description=description)
-    for j in range(len(Items)):
-        if Inventory[j] == "0":
-            pass
+        List.insert(0,Item)
+        
+        if i == 0:
+            List.insert(1,Data)
         else:
-            Embed.add_field(name=Items[j-1],value=Inventory[j],inline=True)
-    await ctx.send(embed=Embed)
-#DisplayInventory(367685478226460704,1)
+            List.insert(i,Data)
+        Inventory.insert(i-1,List)
+    BGPATH="Images/Matte.png"
+    for j in range(len(Inventory)):
+        FP=f"Images/Items/{Inventory[j][0]}.png"
+        Composite(FP,BGPATH,(j*0,j*50),"Images/Output.png")
+        QueueText("Images/Output.png",0,0,0,"Fonts/Hack-Regular.ttf",[(150,j*50),(150,j*50),(150,j*50),(150,j*50)],[Inventory[j][1],Inventory[j][1],Inventory[j][1],Inventory[j][1]],[32,32,32,32])
+        BGPATH="Images/Output.png"
+        print(Inventory[j][0])
+
+DisplayInventory(367685478226460704,1)

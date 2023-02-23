@@ -2,8 +2,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 from SQL import ReadSQL
 import requests
 import shutil
-#Crops a given image down to 128x128
 
+#Crops a given image down to 128x128
 def SquareCrop(FP):
     img=Image.open(FP)
     img.thumbnail((128,128),Image.Resampling.LANCZOS)
@@ -31,6 +31,19 @@ def LevelCardComposite(FP,BGPATH,offset):
     background.convert("RGBA")
     background.save('Images/Usercard.png')
 
+def Composite(FP,BGPATH,offset,FP2):
+    img=Image.open(FP)
+    img_w, img_h = img.size
+    #BGPATH=ReadSQL(str(User),"Background","data")
+    background = Image.open(BGPATH)
+    bg_w, bg_h = background.size
+    if has_transparency(FP)==False:
+        img.convert("RGBA")
+        img.putalpha(255)
+    background.paste(img,offset,img)
+    background.convert("RGBA")
+    background.save(FP2)
+    
 #Draws text on top of a image, in path FP, RGB arguments control color
 def DrawText(FP,Offset,Text,size,R,G,B,Font):
     img=Image.open(FP)
