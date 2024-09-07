@@ -62,12 +62,6 @@ def ReadSQL(Row,Column,Column2,Table):
     Value=cur.fetchone()
     return(Value[0])
 
-#Reads the amount of messages a user has sent
-def GetMsgAmt(ID):
-    data=ReadSQL((ID),"Messages","data")
-    data = re.findall(r'\d+',str(data))
-    return(data[0])
-
 def GetRowAmt(table):
     cur.execute(f"SELECT COUNT(*) FROM {table}")
     Value = cur.fetchone()
