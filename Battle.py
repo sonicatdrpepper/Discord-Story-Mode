@@ -1,0 +1,1 @@
+#TODO Move battle functions in here
